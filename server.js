@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const dns = require('dns');
+const dns = require('dns-lookup');
 const mongoose = require('mongoose');
 
 
@@ -38,7 +38,7 @@ let UrlModel = mongoose.model('urls',UrlSchema);
 
 app.post("/api/shorturl", function(req,res,next) {
     let url = req.body.url.replace(/http?s:\/{2}/,"");
-    dns.lookup(url, function(err) {
+    dns(url, function(err) {
       if (err) {
         console.log(err);
         res.json({error: "Invalid URL"});
