@@ -37,7 +37,7 @@ let UrlModel = mongoose.model('urls',UrlSchema);
 
 
 app.post("/api/shorturl", function(req,res,next) {
-    let url = req.body.url;
+    let url = req.body.url.replace(/http?s:\/{2}/,"");
     dns.lookup(url, function(err) {
       if (err) {
         console.log(err);
@@ -52,12 +52,13 @@ app.post("/api/shorturl", function(req,res,next) {
                 res.json({ original_url: response['original_url'], short_url: response['short_url'] });
               }
               else {
+                let short = new Date().valueOf() ;
                 let UrlData = new UrlModel({
                   original_url: url,
-                  short_url: new Date().valueOf()
+                  short_url: short
                 });
                 UrlData.save();
-                next();
+                res.json({original_url: url, short_url: short});
               }
         })
       
