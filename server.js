@@ -38,8 +38,8 @@ let UrlModel = mongoose.model('urls',UrlSchema);
 
 app.post("/api/shorturl", function(req,res,next) {
     console.log(req.body.url);
-    let url = req.body.url.replace(/http?s:\/{2}/, "").replace(/\/.*/gi,'');
-    dns.lookup(url, function(err) {
+    let url = req.body.url
+    dns.lookup(url.replace(/http?s:\/{2}/, "").replace(/\/.*/gi,''), function(err) {
       if (err) {
         console.log(err);
         res.json({error: "Invalid URL"});
@@ -71,7 +71,7 @@ app.get('/api/shorturl/:short_url', function (req,res) {
     let short = req.params.short_url ;
     UrlModel.findOne({short_url: short}, function(err, response) {
       let original_url = response.original_url ;
-      res.redirect(`http://${original_url}`);
+      res.redirect(original_url);
     })
 })
 //-----------------------------------------------------------------
