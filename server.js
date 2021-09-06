@@ -37,8 +37,8 @@ let UrlModel = mongoose.model('urls',UrlSchema);
 
 
 app.post("/api/shorturl", function(req,res,next) {
-    let url = req.body.url.replace(/http?s:\/{2}/,"");
-    dns(url, function(err) {
+    let url = req.body.url;
+    dns(url.replace(/http?s:\/{2}/, ""), function(err) {
       if (err) {
         console.log(err);
         res.json({error: "Invalid URL"});
